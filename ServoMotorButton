@@ -1,0 +1,69 @@
+#include <Servo.h>
+
+Servo servo;
+int estadoAtualServo = 0;
+
+int input1 = 4;
+int enable1 = 2;
+int input2 = 5;
+int button1 = 6;
+int button2 = 7;
+int button3 = 8;
+ 
+void setup(){
+  pinMode(input1, OUTPUT);
+  pinMode(enable1, OUTPUT);
+  pinMode(input2, OUTPUT);
+  pinMode(button1, INPUT);
+  pinMode(button2, INPUT);
+  pinMode(button3, INPUT);  
+  
+}
+ 
+void rotateLeft(){
+  digitalWrite(enable1, HIGH);
+  digitalWrite(input2, LOW);
+  digitalWrite(input1, HIGH);
+}
+ 
+void rotateRight(){
+  digitalWrite(enable1, HIGH);
+  digitalWrite(input1, LOW);
+  digitalWrite(input2, HIGH);
+}
+ 
+void parar(){
+  digitalWrite(enable1, LOW);
+  digitalWrite(input1, LOW);
+  digitalWrite(input2, LOW);
+}
+ 
+void loop(){
+
+  //motor dc
+  while(digitalRead(button1) == LOW){
+   rotateLeft();
+  }
+  //motor dc
+  while(digitalRead(button2) == LOW){
+    rotateRight();
+  }
+
+   //servo gambiara
+ if(digitalRead(button3) == LOW){
+    if(estadoAtualServo == 180){
+     estadoAtualServo = 0;
+   }
+     else if(estadoAtualServo == 0){
+     estadoAtualServo = 180;
+    }
+  }
+   while (digitalRead(button3) == LOW) //Se botão estiver pressionado (LOW)
+  {      
+    servo.attach(11);
+    servo.write(estadoAtualServo);  
+  }
+        
+  parar();
+  servo.detach();
+}
